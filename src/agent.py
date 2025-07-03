@@ -8,16 +8,22 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.agents import AgentExecutor, create_tool_calling_agent
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_google_community.calendar.toolkit import CalendarToolkit
+from langchain_google_community.calendar.utils import (
+    build_resource_service,
+    get_google_credentials,
+)
 
 class CalendarAgent:
     def __init__(self, model: str='gemini-2.5-flash'):
         # Set up Google Calendar API
-        flow = InstalledAppFlow.from_client_secrets_file(
-            'credentials.json', ['https://www.googleapis.com/auth/calendar'])
-        creds = flow.run_local_server(port=0)
-        self.calendar_service = build('calendar', 'v3', credentials=creds)
-        
-        toolkit = CalendarToolkit(api_resource=self.calendar_service)
+        credentials = get_google_credentials(
+            token_file="token.json",
+            scopes=["https://www.googleapis.com/auth/calendar"],
+            client_secrets_file="credentials.json",
+        )
+
+        api_resource = build_resource_service(credentials=credentials)
+        toolkit = CalendarToolkit(api_resource=api_resource)
         tools = toolkit.get_tools()
 
         # Configure Gemini API key

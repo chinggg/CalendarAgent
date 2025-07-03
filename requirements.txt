@@ -3,5 +3,6 @@ google-auth-httplib2
 google-auth-oauthlib
 google-generativeai
 langchain-google-community
+langchain-google-genai
 tzlocal
 python-dotenv
