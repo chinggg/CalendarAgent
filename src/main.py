@@ -21,7 +21,7 @@ def main():
 
     # Set up Google Gemini API
     genai.configure(api_key=os.environ['GEMINI_API_KEY'])
-    model = genai.GenerativeModel('gemini-pro')
+    model = genai.GenerativeModel('gemini-2.5-flash')
 
     natural_language_service = NaturalLanguageService(model)
 
