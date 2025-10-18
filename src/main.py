@@ -9,7 +9,17 @@ def main():
     print("Hello! I'm your Google Calendar assistant. How can I help you today?")
 
     while True:
-        user_input = input("> ")
+        print("Enter input (Ctrl-D to end):")
+        contents = []
+        while True:
+            try:
+                line = input()
+            except EOFError:
+                break
+            contents.append(line)
+        user_input = "\n".join(contents).strip()
+        if not user_input:
+            continue
 
         if user_input.lower() in ["exit", "quit"]:
             break
