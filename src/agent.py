@@ -57,12 +57,44 @@ class CalendarAgent:
         self.chat_history = []
 
     def process_request(self, user_input):
-        response = self.agent_executor.invoke({
-            "input": user_input,
-            "chat_history": self.chat_history
-        })
-        self.chat_history.extend([
-            HumanMessage(content=user_input),
-            AIMessage(content=response["output"]),
-        ])
-        return response["output"]
+        max_retries = 2
+        retry_count = 0
+        
+        while retry_count <= max_retries:
+            try:
+                response = self.agent_executor.invoke({
+                    "input": user_input,
+                    "chat_history": self.chat_history
+                })
+                
+                self.chat_history.extend([
+                    HumanMessage(content=user_input),
+                    AIMessage(content=response["output"]),
+                ])
+                return response["output"]
+                
+            except Exception as e:
+                retry_count += 1
+                error_message = str(e)
+                
+                if retry_count <= max_retries:
+                    # Provide error feedback to help the agent self-correct
+                    error_feedback = f"There was an error with the previous attempt: {error_message}. Please try a different approach or correct the issue."
+                    
+                    # Add error context to chat history for the retry
+                    self.chat_history.extend([
+                        HumanMessage(content=user_input),
+                        AIMessage(content=f"I encountered an error: {error_message}. Let me try again with a corrected approach."),
+                    ])
+                    
+                    # Modify input to include error context for retry
+                    user_input = f"{user_input}\n\nPrevious error to avoid: {error_feedback}"
+                else:
+                    # Max retries reached, return error message
+                    error_response = f"I apologize, but I encountered repeated errors while processing your request: {error_message}. Please try rephrasing your request or check if there are any issues with your calendar access."
+                    
+                    self.chat_history.extend([
+                        HumanMessage(content=user_input),
+                        AIMessage(content=error_response),
+                    ])
+                    return error_response
