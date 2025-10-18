@@ -1,6 +1,6 @@
-# LLM-based Google Calendar Agent
+# A Simple Google Calendar Agent
 
-This project implements an LLM-based agent that assists with scheduling events in your Google Calendar. The agent is capable of engaging in conversation, and should automatically schedule events when prompted.
+This project implements a simple LLM-based agent that assists with scheduling events in your Google Calendar. The agent is capable of engaging in conversation, and should automatically schedule events when prompted.
 
 ## Features
 
@@ -19,15 +19,12 @@ This project implements an LLM-based agent that assists with scheduling events i
 
 ### Installation
 
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/your-username/calendar-agent.git
-    ```
-2.  Install the dependencies:
+1.  Clone the repository
+2.  Install the dependencies
     ```bash
     pip install -r requirements.txt
     ```
-3.  Set up your credentials:
+3.  Set up your credentials
     *   Place your Google Calendar API `credentials.json` file in the root of the project.
     *   Set your Google Gemini API key as an environment variable:
         ```bash
@@ -42,4 +39,10 @@ Run the agent:
 python src/main.py
 ```
 
-Then, you can start a conversation with the agent to schedule events in your Google Calendar.
+Then, you can start a conversation in terminal with the agent to schedule events in your Google Calendar.
+
+A useful scenario would be delete events in batch. For example:
+
+```
+Delete all events in primary calendar from 2026-01-01 to 2026-04-01 that are not "Fuzzing Collaboration (Monthly)"
+```
